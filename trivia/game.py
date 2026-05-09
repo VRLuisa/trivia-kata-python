@@ -119,33 +119,24 @@ class Game:
             self.handle_normal_turn(roll)
 
     def askQuestion(self):
-        if self.currentCategory() == "Pop":
+        category = self.currentCategory()
+        if category == "Pop":
             print(self.popQuestions.pop(0))
-        if self.currentCategory() == "Science":
+        if category == "Science":
             print(self.scienceQuestions.pop(0))
-        if self.currentCategory() == "Sports":
+        if category == "Sports":
             print(self.sportsQuestions.pop(0))
-        if self.currentCategory() == "Rock":
+        if category == "Rock":
             print(self.rockQuestions.pop(0))
 
     def currentCategory(self):
-        if self.current_player_position() - 1 == 0:
+        position_index = self.current_player_position() - 1
+        category_index = position_index % 4
+        if category_index == 0:
             return "Pop"
-        if self.current_player_position() - 1 == 4:
-            return "Pop"
-        if self.current_player_position() - 1 == 8:
-            return "Pop"
-        if self.current_player_position() - 1 == 1:
+        if category_index == 1:
             return "Science"
-        if self.current_player_position() - 1 == 5:
-            return "Science"
-        if self.current_player_position() - 1 == 9:
-            return "Science"
-        if self.current_player_position() - 1 == 2:
-            return "Sports"
-        if self.current_player_position() - 1 == 6:
-            return "Sports"
-        if self.current_player_position() - 1 == 10:
+        if category_index == 2:
             return "Sports"
         return "Rock"
 
