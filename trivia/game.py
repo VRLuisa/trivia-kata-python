@@ -72,6 +72,10 @@ class Game:
         print("The category is " + self.currentCategory())
         self.askQuestion()
 
+    def handle_normal_turn(self, roll):
+        self.move_current_player(roll)
+        self.show_location_and_ask_question()
+
     def roll(self, roll):
         print(self.current_player_name() + " is the current player")
         print("They have rolled a " + str(roll))
@@ -88,8 +92,7 @@ class Game:
                 self.is_getting_out_of_penalty_box = False
 
         else:
-            self.move_current_player(roll)
-            self.show_location_and_ask_question()
+            self.handle_normal_turn(roll)
 
     def askQuestion(self):
         if self.currentCategory() == "Pop":
