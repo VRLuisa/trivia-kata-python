@@ -55,6 +55,9 @@ class Game:
     def current_player_position(self):
         return self.player_positions[self.current_player_index]
     
+    def current_player_is_in_penalty_box(self):
+        return self.player_in_penalty_box[self.current_player_index]
+    
     def move_current_player(self, roll):
         self.player_positions[self.current_player_index] = self.player_positions[self.current_player_index] + roll
         if self.player_positions[self.current_player_index] > BOARD_SIZE:
@@ -73,7 +76,7 @@ class Game:
         print(self.current_player_name() + " is the current player")
         print("They have rolled a " + str(roll))
 
-        if self.player_in_penalty_box[self.current_player_index]:
+        if self.current_player_is_in_penalty_box():
             if roll % 2 != 0:
                 self.is_getting_out_of_penalty_box = True
 
@@ -120,7 +123,7 @@ class Game:
         return "Rock"
 
     def handleCorrectAnswer(self):
-        if self.player_in_penalty_box[self.current_player_index]:
+        if self.current_player_is_in_penalty_box():
             if self.is_getting_out_of_penalty_box:
                 print("Answer was correct!!!!")
                 self.player_coins[self.current_player_index] += 1
