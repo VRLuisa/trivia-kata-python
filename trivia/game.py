@@ -48,29 +48,32 @@ class Game:
         self.current_player_index += 1
         if self.current_player_index == len(self.players):
             self.current_player_index = 0
+    
+    def current_player_name(self):
+        return self.players[self.current_player_index]
 
     def roll(self, roll):
-        print(self.players[self.current_player_index] + " is the current player")
+        print(self.current_player_name() + " is the current player")
         print("They have rolled a " + str(roll))
 
         if self.player_in_penalty_box[self.current_player_index]:
             if roll % 2 != 0:
                 self.is_getting_out_of_penalty_box = True
 
-                print(self.players[self.current_player_index] + " is getting out of the penalty box")
+                print(self.current_player_name() + " is getting out of the penalty box")
                 self.player_positions [self.current_player_index] = self.player_positions [self.current_player_index] + roll
                 if self.player_positions [self.current_player_index] > BOARD_SIZE:
                     self.player_positions [self.current_player_index] = self.player_positions [self.current_player_index] - BOARD_SIZE
 
                 print(
-                    self.players[self.current_player_index]
+                    self.current_player_name()
                     + "'s new location is "
                     + str(self.player_positions [self.current_player_index])
                 )
                 print("The category is " + self.currentCategory())
                 self.askQuestion()
             else:
-                print(self.players[self.current_player_index] + " is not getting out of the penalty box")
+                print(self.current_player_name() + " is not getting out of the penalty box")
                 self.is_getting_out_of_penalty_box = False
 
         else:
@@ -79,7 +82,7 @@ class Game:
                 self.player_positions [self.current_player_index] = self.player_positions [self.current_player_index] - BOARD_SIZE
 
             print(
-                self.players[self.current_player_index]
+                self.current_player_name()
                 + "'s new location is "
                 + str(self.player_positions [self.current_player_index])
             )
@@ -123,7 +126,7 @@ class Game:
                 print("Answer was correct!!!!")
                 self.player_coins[self.current_player_index] += 1
                 print(
-                    self.players[self.current_player_index]
+                    self.current_player_name()
                     + " now has "
                     + str(self.player_coins[self.current_player_index])
                     + " Gold Coins."
@@ -141,7 +144,7 @@ class Game:
             print("Answer was corrent!!!!")
             self.player_coins[self.current_player_index] += 1
             print(
-                self.players[self.current_player_index]
+                self.current_player_name()
                 + " now has "
                 + str(self.player_coins[self.current_player_index])
                 + " Gold Coins."
@@ -154,7 +157,7 @@ class Game:
 
     def wrongAnswer(self):
         print("Question was incorrectly answered")
-        print(self.players[self.current_player_index] + " was sent to the penalty box")
+        print(self.current_player_name() + " was sent to the penalty box")
         self.player_in_penalty_box[self.current_player_index] = True
 
         self.advance_to_next_player()
