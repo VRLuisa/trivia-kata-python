@@ -17,7 +17,7 @@ class Game:
         self.rockQuestions = []
 
         self.current_player_index = 0
-        self.isGettingOutOfPenaltyBox = False
+        self.is_getting_out_of_penalty_box = False
 
         for i in range(QUESTIONS_PER_CATEGORY):
             self.popQuestions.append("Pop Question " + str(i))
@@ -50,7 +50,7 @@ class Game:
 
         if self.player_in_penalty_box[self.current_player_index]:
             if roll % 2 != 0:
-                self.isGettingOutOfPenaltyBox = True
+                self.is_getting_out_of_penalty_box = True
 
                 print(self.players[self.current_player_index] + " is getting out of the penalty box")
                 self.player_positions [self.current_player_index] = self.player_positions [self.current_player_index] + roll
@@ -66,7 +66,7 @@ class Game:
                 self.askQuestion()
             else:
                 print(self.players[self.current_player_index] + " is not getting out of the penalty box")
-                self.isGettingOutOfPenaltyBox = False
+                self.is_getting_out_of_penalty_box = False
 
         else:
             self.player_positions [self.current_player_index] = self.player_positions [self.current_player_index] + roll
@@ -114,7 +114,7 @@ class Game:
 
     def handleCorrectAnswer(self):
         if self.player_in_penalty_box[self.current_player_index]:
-            if self.isGettingOutOfPenaltyBox:
+            if self.is_getting_out_of_penalty_box:
                 print("Answer was correct!!!!")
                 self.player_coins[self.current_player_index] += 1
                 print(
