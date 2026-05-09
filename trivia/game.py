@@ -68,6 +68,7 @@ class Game:
         winner = self.didPlayerWin()
         self.advance_to_next_player()
         return winner
+    
     def handle_current_player_correct_answer(self, answer_message):
         print(answer_message)
         self.award_coin_to_current_player()
@@ -95,7 +96,7 @@ class Game:
         self.show_location_and_ask_question()
 
     def handle_penalty_box_turn(self, roll):
-        if roll % 2 != 0:
+        if self.can_get_out_of_penalty_box(roll):
             self.is_getting_out_of_penalty_box = True
 
             print(self.current_player_name() + " is getting out of the penalty box")
@@ -104,6 +105,9 @@ class Game:
         else:
             print(self.current_player_name() + " is not getting out of the penalty box")
             self.is_getting_out_of_penalty_box = False
+
+    def can_get_out_of_penalty_box(self, roll):
+        return roll % 2 != 0
 
     def roll(self, roll):
         print(self.current_player_name() + " is the current player")
