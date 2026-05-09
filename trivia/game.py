@@ -10,6 +10,7 @@ class Player:
         self.name = name
         self.position = 1
         self.coins = 0
+        self.in_penalty_box = False
 
 class QuestionDeck:
     def __init__(self):
@@ -37,7 +38,6 @@ class QuestionDeck:
 class Game:
     def __init__(self):
         self.players = []
-        self.player_in_penalty_box = [False] * MAX_PLAYERS
 
         self.current_player_index = 0
         self.is_getting_out_of_penalty_box = False
@@ -49,7 +49,6 @@ class Game:
         return self.howManyPlayers() >= MINIMUM_PLAYERS
 
     def add(self, playerName):
-        self.player_in_penalty_box[self.howManyPlayers()] = False
         self.players.append(Player(playerName))
 
         print(playerName + " was added")
@@ -92,7 +91,7 @@ class Game:
         return self.finish_turn_after_correct_answer()
 
     def current_player_is_in_penalty_box(self):
-        return self.player_in_penalty_box[self.current_player_index]
+        return self.players[self.current_player_index].in_penalty_box
     
     def move_current_player(self, roll):
         current_player = self.players[self.current_player_index]
@@ -164,7 +163,7 @@ class Game:
     def wrongAnswer(self):
         print("Question was incorrectly answered")
         print(self.current_player_name() + " was sent to the penalty box")
-        self.player_in_penalty_box[self.current_player_index] = True
+        self.players[self.current_player_index].in_penalty_box = True
 
         self.advance_to_next_player()
         return True
