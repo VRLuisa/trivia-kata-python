@@ -76,21 +76,23 @@ class Game:
         self.move_current_player(roll)
         self.show_location_and_ask_question()
 
+    def handle_penalty_box_turn(self, roll):
+        if roll % 2 != 0:
+            self.is_getting_out_of_penalty_box = True
+
+            print(self.current_player_name() + " is getting out of the penalty box")
+            self.move_current_player(roll)
+            self.show_location_and_ask_question()
+        else:
+            print(self.current_player_name() + " is not getting out of the penalty box")
+            self.is_getting_out_of_penalty_box = False
+
     def roll(self, roll):
         print(self.current_player_name() + " is the current player")
         print("They have rolled a " + str(roll))
 
         if self.current_player_is_in_penalty_box():
-            if roll % 2 != 0:
-                self.is_getting_out_of_penalty_box = True
-
-                print(self.current_player_name() + " is getting out of the penalty box")
-                self.move_current_player(roll)
-                self.show_location_and_ask_question()
-            else:
-                print(self.current_player_name() + " is not getting out of the penalty box")
-                self.is_getting_out_of_penalty_box = False
-
+            self.handle_penalty_box_turn(roll)
         else:
             self.handle_normal_turn(roll)
 
