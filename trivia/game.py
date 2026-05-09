@@ -12,6 +12,12 @@ class Player:
         self.coins = 0
         self.in_penalty_box = False
 
+    def move(self, roll):
+        self.position = self.position + roll
+
+        if self.position > BOARD_SIZE:
+            self.position = self.position - BOARD_SIZE
+
 class QuestionDeck:
     def __init__(self):
         self.questions_by_category = {
@@ -63,14 +69,17 @@ class Game:
         if self.current_player_index == len(self.players):
             self.current_player_index = 0
     
+    def current_player(self):
+        return self.players[self.current_player_index]
+
     def current_player_name(self):
-        return self.players[self.current_player_index].name
+        return self.current_player().name
     
     def current_player_position(self):
-        return self.players[self.current_player_index].position
+        return self.current_player().position
     
     def award_coin_to_current_player(self):
-        current_player = self.players[self.current_player_index]
+        current_player = self.current_player()
         current_player.coins += 1
 
         print(
@@ -91,14 +100,10 @@ class Game:
         return self.finish_turn_after_correct_answer()
 
     def current_player_is_in_penalty_box(self):
-        return self.players[self.current_player_index].in_penalty_box
+        return self.current_player().in_penalty_box
     
     def move_current_player(self, roll):
-        current_player = self.players[self.current_player_index]
-        current_player.position = current_player.position + roll
-
-        if current_player.position > BOARD_SIZE:
-            current_player.position = current_player.position - BOARD_SIZE
+        self.current_player().move(roll)
     
     def show_location_and_ask_question(self):
         print(
@@ -163,10 +168,10 @@ class Game:
     def wrongAnswer(self):
         print("Question was incorrectly answered")
         print(self.current_player_name() + " was sent to the penalty box")
-        self.players[self.current_player_index].in_penalty_box = True
+        self.current_player().in_penalty_box = True
 
         self.advance_to_next_player()
         return True
 
     def didPlayerWin(self):
-        return not (self.players[self.current_player_index].coins == WINNING_COINS)
+        return not (self.current_player().coins == WINNING_COINS)
