@@ -148,6 +148,12 @@ class GameOld:
             return winner
 
     def wrongAnswer(self):
+        if self.inPenaltyBox[self.currentPlayer] and not self.isGettingOutOfPenaltyBox:
+            self.currentPlayer += 1
+            if self.currentPlayer == len(self.players):
+                self.currentPlayer = 0
+            return True
+
         print("Question was incorrectly answered")
         print(self.players[self.currentPlayer] + " was sent to the penalty box")
         self.inPenaltyBox[self.currentPlayer] = True

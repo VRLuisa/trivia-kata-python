@@ -182,6 +182,10 @@ class Game:
         return self.handle_correct_answer()
 
     def wrong_answer(self):
+        if self.current_player_is_in_penalty_box() and not self.is_getting_out_of_penalty_box:
+            self.advance_to_next_player()
+            return True
+
         print("Question was incorrectly answered")
         print(self.current_player_name() + " was sent to the penalty box")
         self.current_player().send_to_penalty_box()
