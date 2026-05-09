@@ -3,6 +3,7 @@ from contextlib import redirect_stdout
 
 from trivia.game import Game
 from trivia.game_old import GameOld
+from trivia.game import MAX_PLAYERS
 
 
 class JavaRandom:
@@ -66,3 +67,16 @@ def test_one_seed_can_be_checked_manually():
     actual_output = extract_output(JavaRandom(seed), Game())
 
     assert expected_output == actual_output
+
+def test_cannot_add_more_than_maximum_players():
+    game = Game()
+
+    assert game.add("Player 1") is True
+    assert game.add("Player 2") is True
+    assert game.add("Player 3") is True
+    assert game.add("Player 4") is True
+    assert game.add("Player 5") is True
+    assert game.add("Player 6") is True
+
+    assert game.add("Player 7") is False
+    assert game.how_many_players() == MAX_PLAYERS

@@ -5,7 +5,6 @@ BOARD_SIZE = 12
 WINNING_COINS = 6
 CATEGORIES = ["Pop", "Science", "Sports", "Rock"]
 
-
 class Player:
     def __init__(self, name):
         self.name = name
@@ -27,7 +26,6 @@ class Player:
 
     def has_won(self):
         return self.coins == WINNING_COINS
-
 
 class QuestionDeck:
     def __init__(self):
@@ -52,7 +50,6 @@ class QuestionDeck:
     def next_question_for(self, category):
         return self.questions_by_category[category].pop(0)
 
-
 class Game:
     def __init__(self):
         self.players = []
@@ -67,6 +64,9 @@ class Game:
         return self.is_playable()
 
     def add(self, player_name):
+        if self.has_reached_maximum_players():
+            return False
+
         self.players.append(Player(player_name))
         print(player_name + " was added")
         print("They are player number " + str(len(self.players)))
@@ -77,6 +77,9 @@ class Game:
 
     def howManyPlayers(self):
         return self.how_many_players()
+    
+    def has_reached_maximum_players(self):
+        return self.how_many_players() == MAX_PLAYERS
 
     def advance_to_next_player(self):
         self.current_player_index += 1
