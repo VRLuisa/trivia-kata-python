@@ -51,6 +51,11 @@ class Game:
     
     def current_player_name(self):
         return self.players[self.current_player_index]
+    
+    def move_current_player(self, roll):
+        self.player_positions[self.current_player_index] = self.player_positions[self.current_player_index] + roll
+        if self.player_positions[self.current_player_index] > BOARD_SIZE:
+            self.player_positions[self.current_player_index] = self.player_positions[self.current_player_index] - BOARD_SIZE
 
     def roll(self, roll):
         print(self.current_player_name() + " is the current player")
@@ -61,10 +66,7 @@ class Game:
                 self.is_getting_out_of_penalty_box = True
 
                 print(self.current_player_name() + " is getting out of the penalty box")
-                self.player_positions [self.current_player_index] = self.player_positions [self.current_player_index] + roll
-                if self.player_positions [self.current_player_index] > BOARD_SIZE:
-                    self.player_positions [self.current_player_index] = self.player_positions [self.current_player_index] - BOARD_SIZE
-
+                self.move_current_player(roll)
                 print(
                     self.current_player_name()
                     + "'s new location is "
@@ -77,9 +79,7 @@ class Game:
                 self.is_getting_out_of_penalty_box = False
 
         else:
-            self.player_positions [self.current_player_index] = self.player_positions [self.current_player_index] + roll
-            if self.player_positions [self.current_player_index] > BOARD_SIZE:
-                self.player_positions [self.current_player_index] = self.player_positions [self.current_player_index] - BOARD_SIZE
+            self.move_current_player(roll)
 
             print(
                 self.current_player_name()
