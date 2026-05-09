@@ -176,7 +176,7 @@ class Game:
             self.advance_to_next_player()
             return True
 
-        return self.handle_current_player_correct_answer("Answer was corrent!!!!")
+        return self.handle_current_player_correct_answer("Answer was correct!!!!")
 
     def handleCorrectAnswer(self):
         return self.handle_correct_answer()

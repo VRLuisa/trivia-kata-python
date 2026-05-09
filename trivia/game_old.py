@@ -131,7 +131,7 @@ class GameOld:
                 return True
 
         else:
-            print("Answer was corrent!!!!")
+            print("Answer was correct!!!!")
             self.purses[self.currentPlayer] += 1
             print(
                 self.players[self.currentPlayer]
