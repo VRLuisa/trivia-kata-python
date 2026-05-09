@@ -5,6 +5,7 @@ BOARD_SIZE = 12
 WINNING_COINS = 6
 CATEGORIES = ["Pop", "Science", "Sports", "Rock"]
 
+
 class Player:
     def __init__(self, name):
         self.name = name
@@ -17,7 +18,7 @@ class Player:
 
         if self.position > BOARD_SIZE:
             self.position = self.position - BOARD_SIZE
-    
+
     def award_coin(self):
         self.coins += 1
 
@@ -26,6 +27,7 @@ class Player:
 
     def has_won(self):
         return self.coins == WINNING_COINS
+
 
 class QuestionDeck:
     def __init__(self):
@@ -50,46 +52,50 @@ class QuestionDeck:
     def next_question_for(self, category):
         return self.questions_by_category[category].pop(0)
 
+
 class Game:
     def __init__(self):
         self.players = []
-
         self.current_player_index = 0
         self.is_getting_out_of_penalty_box = False
-
         self.question_deck = QuestionDeck()
 
+    def is_playable(self):
+        return self.how_many_players() >= MINIMUM_PLAYERS
 
     def isPlayable(self):
-        return self.howManyPlayers() >= MINIMUM_PLAYERS
+        return self.is_playable()
 
-    def add(self, playerName):
-        self.players.append(Player(playerName))
-
-        print(playerName + " was added")
+    def add(self, player_name):
+        self.players.append(Player(player_name))
+        print(player_name + " was added")
         print("They are player number " + str(len(self.players)))
         return True
 
-    def howManyPlayers(self):
+    def how_many_players(self):
         return len(self.players)
-    
+
+    def howManyPlayers(self):
+        return self.how_many_players()
+
     def advance_to_next_player(self):
         self.current_player_index += 1
         if self.current_player_index == len(self.players):
             self.current_player_index = 0
-    
+
     def current_player(self):
         return self.players[self.current_player_index]
 
     def current_player_name(self):
         return self.current_player().name
-    
+
     def current_player_position(self):
         return self.current_player().position
-    
+
     def award_coin_to_current_player(self):
         current_player = self.current_player()
         current_player.award_coin()
+
         print(
             self.current_player_name()
             + " now has "
@@ -98,10 +104,10 @@ class Game:
         )
 
     def finish_turn_after_correct_answer(self):
-        winner = self.didPlayerWin()
+        should_continue = self.should_continue_game()
         self.advance_to_next_player()
-        return winner
-    
+        return should_continue
+
     def handle_current_player_correct_answer(self, answer_message):
         print(answer_message)
         self.award_coin_to_current_player()
@@ -109,10 +115,10 @@ class Game:
 
     def current_player_is_in_penalty_box(self):
         return self.current_player().in_penalty_box
-    
+
     def move_current_player(self, roll):
         self.current_player().move(roll)
-    
+
     def show_location_and_ask_question(self):
         print(
             self.current_player_name()
@@ -162,18 +168,20 @@ class Game:
 
         return CATEGORIES[category_index]
 
-    def handleCorrectAnswer(self):
+    def handle_correct_answer(self):
         if self.current_player_is_in_penalty_box():
             if self.is_getting_out_of_penalty_box:
                 return self.handle_current_player_correct_answer("Answer was correct!!!!")
-            else:
-                self.advance_to_next_player()
-                return True
 
-        else:
-            return self.handle_current_player_correct_answer("Answer was corrent!!!!")
+            self.advance_to_next_player()
+            return True
 
-    def wrongAnswer(self):
+        return self.handle_current_player_correct_answer("Answer was corrent!!!!")
+
+    def handleCorrectAnswer(self):
+        return self.handle_correct_answer()
+
+    def wrong_answer(self):
         print("Question was incorrectly answered")
         print(self.current_player_name() + " was sent to the penalty box")
         self.current_player().send_to_penalty_box()
@@ -181,5 +189,8 @@ class Game:
         self.advance_to_next_player()
         return True
 
-    def didPlayerWin(self):
+    def wrongAnswer(self):
+        return self.wrong_answer()
+
+    def should_continue_game(self):
         return not self.current_player().has_won()
