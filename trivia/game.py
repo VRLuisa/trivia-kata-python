@@ -55,6 +55,24 @@ class Game:
     def current_player_position(self):
         return self.player_positions[self.current_player_index]
     
+    def award_coin_to_current_player(self):
+        self.player_coins[self.current_player_index] += 1
+        print(
+            self.current_player_name()
+            + " now has "
+            + str(self.player_coins[self.current_player_index])
+            + " Gold Coins."
+        )
+
+    def finish_turn_after_correct_answer(self):
+        winner = self.didPlayerWin()
+        self.advance_to_next_player()
+        return winner
+    def handle_current_player_correct_answer(self, answer_message):
+        print(answer_message)
+        self.award_coin_to_current_player()
+        return self.finish_turn_after_correct_answer()
+
     def current_player_is_in_penalty_box(self):
         return self.player_in_penalty_box[self.current_player_index]
     
@@ -130,37 +148,13 @@ class Game:
     def handleCorrectAnswer(self):
         if self.current_player_is_in_penalty_box():
             if self.is_getting_out_of_penalty_box:
-                print("Answer was correct!!!!")
-                self.player_coins[self.current_player_index] += 1
-                print(
-                    self.current_player_name()
-                    + " now has "
-                    + str(self.player_coins[self.current_player_index])
-                    + " Gold Coins."
-                )
-
-                winner = self.didPlayerWin()
-                self.advance_to_next_player()
-
-                return winner
+                return self.handle_current_player_correct_answer("Answer was correct!!!!")
             else:
                 self.advance_to_next_player()
                 return True
 
         else:
-            print("Answer was corrent!!!!")
-            self.player_coins[self.current_player_index] += 1
-            print(
-                self.current_player_name()
-                + " now has "
-                + str(self.player_coins[self.current_player_index])
-                + " Gold Coins."
-            )
-
-            winner = self.didPlayerWin()
-            self.advance_to_next_player()
-
-            return winner
+            return self.handle_current_player_correct_answer("Answer was corrent!!!!")
 
     def wrongAnswer(self):
         print("Question was incorrectly answered")
