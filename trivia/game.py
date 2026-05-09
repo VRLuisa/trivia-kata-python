@@ -60,6 +60,15 @@ class Game:
         if self.player_positions[self.current_player_index] > BOARD_SIZE:
             self.player_positions[self.current_player_index] = self.player_positions[self.current_player_index] - BOARD_SIZE
 
+    def show_location_and_ask_question(self):
+        print(
+            self.current_player_name()
+            + "'s new location is "
+            + str(self.current_player_position())
+        )
+        print("The category is " + self.currentCategory())
+        self.askQuestion()
+
     def roll(self, roll):
         print(self.current_player_name() + " is the current player")
         print("They have rolled a " + str(roll))
@@ -70,27 +79,14 @@ class Game:
 
                 print(self.current_player_name() + " is getting out of the penalty box")
                 self.move_current_player(roll)
-                print(
-                    self.current_player_name()
-                    + "'s new location is "
-                    + str(self.player_positions [self.current_player_index])
-                )
-                print("The category is " + self.currentCategory())
-                self.askQuestion()
+                self.show_location_and_ask_question()
             else:
                 print(self.current_player_name() + " is not getting out of the penalty box")
                 self.is_getting_out_of_penalty_box = False
 
         else:
             self.move_current_player(roll)
-
-            print(
-                self.current_player_name()
-                + "'s new location is "
-                + str(self.player_positions [self.current_player_index])
-            )
-            print("The category is " + self.currentCategory())
-            self.askQuestion()
+            self.show_location_and_ask_question()
 
     def askQuestion(self):
         if self.currentCategory() == "Pop":
