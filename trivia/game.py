@@ -5,6 +5,29 @@ BOARD_SIZE = 12
 WINNING_COINS = 6
 CATEGORIES = ["Pop", "Science", "Sports", "Rock"]
 
+class QuestionDeck:
+    def __init__(self):
+        self.questions_by_category = {
+            "Pop": [],
+            "Science": [],
+            "Sports": [],
+            "Rock": [],
+        }
+        self.create_questions()
+
+    def create_questions(self):
+        for i in range(QUESTIONS_PER_CATEGORY):
+            self.questions_by_category["Pop"].append("Pop Question " + str(i))
+            self.questions_by_category["Science"].append("Science Question " + str(i))
+            self.questions_by_category["Sports"].append("Sports Question " + str(i))
+            self.questions_by_category["Rock"].append(self.create_rock_question(i))
+
+    def create_rock_question(self, index):
+        return "Rock Question " + str(index)
+
+    def next_question_for(self, category):
+        return self.questions_by_category[category].pop(0)
+
 class Game:
     def __init__(self):
         self.players = []
@@ -12,22 +35,11 @@ class Game:
         self.player_coins = [0] * MAX_PLAYERS
         self.player_in_penalty_box = [False] * MAX_PLAYERS
 
-        self.popQuestions = []
-        self.scienceQuestions = []
-        self.sportsQuestions = []
-        self.rockQuestions = []
-
         self.current_player_index = 0
         self.is_getting_out_of_penalty_box = False
 
-        for i in range(QUESTIONS_PER_CATEGORY):
-            self.popQuestions.append("Pop Question " + str(i))
-            self.scienceQuestions.append("Science Question " + str(i))
-            self.sportsQuestions.append("Sports Question " + str(i))
-            self.rockQuestions.append(self.createRockQuestion(i))
+        self.question_deck = QuestionDeck()
 
-    def createRockQuestion(self, index):
-        return "Rock Question " + str(index)
 
     def isPlayable(self):
         return self.howManyPlayers() >= MINIMUM_PLAYERS
@@ -90,7 +102,7 @@ class Game:
             + str(self.current_player_position())
         )
         print("The category is " + self.current_category())
-        self.askQuestion()
+        self.ask_question()
 
     def handle_normal_turn(self, roll):
         self.move_current_player(roll)
@@ -119,16 +131,12 @@ class Game:
         else:
             self.handle_normal_turn(roll)
 
-    def askQuestion(self):
+    def next_question_for(self, category):
+        return self.question_deck.next_question_for(category)
+
+    def ask_question(self):
         category = self.current_category()
-        if category == "Pop":
-            print(self.popQuestions.pop(0))
-        if category == "Science":
-            print(self.scienceQuestions.pop(0))
-        if category == "Sports":
-            print(self.sportsQuestions.pop(0))
-        if category == "Rock":
-            print(self.rockQuestions.pop(0))
+        print(self.next_question_for(category))
 
     def current_category(self):
         position_index = self.current_player_position() - 1
