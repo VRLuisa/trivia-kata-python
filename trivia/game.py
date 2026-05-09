@@ -3,6 +3,7 @@ MINIMUM_PLAYERS = 2
 QUESTIONS_PER_CATEGORY = 50
 BOARD_SIZE = 12
 WINNING_COINS = 6
+CATEGORIES = ["Pop", "Science", "Sports", "Rock"]
 
 class Game:
     def __init__(self):
@@ -88,7 +89,7 @@ class Game:
             + "'s new location is "
             + str(self.current_player_position())
         )
-        print("The category is " + self.currentCategory())
+        print("The category is " + self.current_category())
         self.askQuestion()
 
     def handle_normal_turn(self, roll):
@@ -119,7 +120,7 @@ class Game:
             self.handle_normal_turn(roll)
 
     def askQuestion(self):
-        category = self.currentCategory()
+        category = self.current_category()
         if category == "Pop":
             print(self.popQuestions.pop(0))
         if category == "Science":
@@ -129,16 +130,11 @@ class Game:
         if category == "Rock":
             print(self.rockQuestions.pop(0))
 
-    def currentCategory(self):
+    def current_category(self):
         position_index = self.current_player_position() - 1
-        category_index = position_index % 4
-        if category_index == 0:
-            return "Pop"
-        if category_index == 1:
-            return "Science"
-        if category_index == 2:
-            return "Sports"
-        return "Rock"
+        category_index = position_index % len(CATEGORIES)
+
+        return CATEGORIES[category_index]
 
     def handleCorrectAnswer(self):
         if self.current_player_is_in_penalty_box():
