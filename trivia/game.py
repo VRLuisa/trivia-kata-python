@@ -1,9 +1,15 @@
+MAX_PLAYERS = 6
+MINIMUM_PLAYERS = 2
+QUESTIONS_PER_CATEGORY = 50
+BOARD_SIZE = 12
+WINNING_COINS = 6
+
 class Game:
     def __init__(self):
         self.players = []
-        self.places = [0] * 6
-        self.purses = [0] * 6
-        self.inPenaltyBox = [False] * 6
+        self.places = [0] * MAX_PLAYERS
+        self.purses = [0] * MAX_PLAYERS
+        self.inPenaltyBox = [False] * MAX_PLAYERS
 
         self.popQuestions = []
         self.scienceQuestions = []
@@ -13,7 +19,7 @@ class Game:
         self.currentPlayer = 0
         self.isGettingOutOfPenaltyBox = False
 
-        for i in range(50):
+        for i in range(QUESTIONS_PER_CATEGORY):
             self.popQuestions.append("Pop Question " + str(i))
             self.scienceQuestions.append("Science Question " + str(i))
             self.sportsQuestions.append("Sports Question " + str(i))
@@ -23,7 +29,7 @@ class Game:
         return "Rock Question " + str(index)
 
     def isPlayable(self):
-        return self.howManyPlayers() >= 2
+        return self.howManyPlayers() >= MINIMUM_PLAYERS
 
     def add(self, playerName):
         self.places[self.howManyPlayers()] = 1
@@ -48,8 +54,8 @@ class Game:
 
                 print(self.players[self.currentPlayer] + " is getting out of the penalty box")
                 self.places[self.currentPlayer] = self.places[self.currentPlayer] + roll
-                if self.places[self.currentPlayer] > 12:
-                    self.places[self.currentPlayer] = self.places[self.currentPlayer] - 12
+                if self.places[self.currentPlayer] > BOARD_SIZE:
+                    self.places[self.currentPlayer] = self.places[self.currentPlayer] - BOARD_SIZE
 
                 print(
                     self.players[self.currentPlayer]
@@ -158,4 +164,4 @@ class Game:
         return True
 
     def didPlayerWin(self):
-        return not (self.purses[self.currentPlayer] == 6)
+        return not (self.purses[self.currentPlayer] == WINNING_COINS)
