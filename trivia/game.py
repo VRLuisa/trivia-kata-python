@@ -5,6 +5,12 @@ BOARD_SIZE = 12
 WINNING_COINS = 6
 CATEGORIES = ["Pop", "Science", "Sports", "Rock"]
 
+class Player:
+    def __init__(self, name):
+        self.name = name
+        self.position = 1
+        self.coins = 0
+
 class QuestionDeck:
     def __init__(self):
         self.questions_by_category = {
@@ -31,8 +37,6 @@ class QuestionDeck:
 class Game:
     def __init__(self):
         self.players = []
-        self.player_positions  = [0] * MAX_PLAYERS
-        self.player_coins = [0] * MAX_PLAYERS
         self.player_in_penalty_box = [False] * MAX_PLAYERS
 
         self.current_player_index = 0
@@ -45,10 +49,8 @@ class Game:
         return self.howManyPlayers() >= MINIMUM_PLAYERS
 
     def add(self, playerName):
-        self.player_positions [self.howManyPlayers()] = 1
-        self.player_coins[self.howManyPlayers()] = 0
         self.player_in_penalty_box[self.howManyPlayers()] = False
-        self.players.append(playerName)
+        self.players.append(Player(playerName))
 
         print(playerName + " was added")
         print("They are player number " + str(len(self.players)))
@@ -63,17 +65,19 @@ class Game:
             self.current_player_index = 0
     
     def current_player_name(self):
-        return self.players[self.current_player_index]
+        return self.players[self.current_player_index].name
     
     def current_player_position(self):
-        return self.player_positions[self.current_player_index]
+        return self.players[self.current_player_index].position
     
     def award_coin_to_current_player(self):
-        self.player_coins[self.current_player_index] += 1
+        current_player = self.players[self.current_player_index]
+        current_player.coins += 1
+
         print(
             self.current_player_name()
             + " now has "
-            + str(self.player_coins[self.current_player_index])
+            + str(current_player.coins)
             + " Gold Coins."
         )
 
@@ -91,10 +95,12 @@ class Game:
         return self.player_in_penalty_box[self.current_player_index]
     
     def move_current_player(self, roll):
-        self.player_positions[self.current_player_index] = self.player_positions[self.current_player_index] + roll
-        if self.player_positions[self.current_player_index] > BOARD_SIZE:
-            self.player_positions[self.current_player_index] = self.player_positions[self.current_player_index] - BOARD_SIZE
+        current_player = self.players[self.current_player_index]
+        current_player.position = current_player.position + roll
 
+        if current_player.position > BOARD_SIZE:
+            current_player.position = current_player.position - BOARD_SIZE
+    
     def show_location_and_ask_question(self):
         print(
             self.current_player_name()
@@ -164,4 +170,4 @@ class Game:
         return True
 
     def didPlayerWin(self):
-        return not (self.player_coins[self.current_player_index] == WINNING_COINS)
+        return not (self.players[self.current_player_index].coins == WINNING_COINS)
