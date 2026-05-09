@@ -17,6 +17,9 @@ class Player:
 
         if self.position > BOARD_SIZE:
             self.position = self.position - BOARD_SIZE
+    
+    def award_coin(self):
+        self.coins += 1
 
 class QuestionDeck:
     def __init__(self):
@@ -80,8 +83,7 @@ class Game:
     
     def award_coin_to_current_player(self):
         current_player = self.current_player()
-        current_player.coins += 1
-
+        current_player.award_coin()
         print(
             self.current_player_name()
             + " now has "
