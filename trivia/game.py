@@ -52,6 +52,9 @@ class Game:
     def current_player_name(self):
         return self.players[self.current_player_index]
     
+    def current_player_position(self):
+        return self.player_positions[self.current_player_index]
+    
     def move_current_player(self, roll):
         self.player_positions[self.current_player_index] = self.player_positions[self.current_player_index] + roll
         if self.player_positions[self.current_player_index] > BOARD_SIZE:
@@ -100,23 +103,23 @@ class Game:
             print(self.rockQuestions.pop(0))
 
     def currentCategory(self):
-        if self.player_positions [self.current_player_index] - 1 == 0:
+        if self.current_player_position() - 1 == 0:
             return "Pop"
-        if self.player_positions [self.current_player_index] - 1 == 4:
+        if self.current_player_position() - 1 == 4:
             return "Pop"
-        if self.player_positions [self.current_player_index] - 1 == 8:
+        if self.current_player_position() - 1 == 8:
             return "Pop"
-        if self.player_positions [self.current_player_index] - 1 == 1:
+        if self.current_player_position() - 1 == 1:
             return "Science"
-        if self.player_positions [self.current_player_index] - 1 == 5:
+        if self.current_player_position() - 1 == 5:
             return "Science"
-        if self.player_positions [self.current_player_index] - 1 == 9:
+        if self.current_player_position() - 1 == 9:
             return "Science"
-        if self.player_positions [self.current_player_index] - 1 == 2:
+        if self.current_player_position() - 1 == 2:
             return "Sports"
-        if self.player_positions [self.current_player_index] - 1 == 6:
+        if self.current_player_position() - 1 == 6:
             return "Sports"
-        if self.player_positions [self.current_player_index] - 1 == 10:
+        if self.current_player_position() - 1 == 10:
             return "Sports"
         return "Rock"
 
