@@ -7,7 +7,7 @@ WINNING_COINS = 6
 class Game:
     def __init__(self):
         self.players = []
-        self.places = [0] * MAX_PLAYERS
+        self.player_positions  = [0] * MAX_PLAYERS
         self.purses = [0] * MAX_PLAYERS
         self.inPenaltyBox = [False] * MAX_PLAYERS
 
@@ -32,7 +32,7 @@ class Game:
         return self.howManyPlayers() >= MINIMUM_PLAYERS
 
     def add(self, playerName):
-        self.places[self.howManyPlayers()] = 1
+        self.player_positions [self.howManyPlayers()] = 1
         self.purses[self.howManyPlayers()] = 0
         self.inPenaltyBox[self.howManyPlayers()] = False
         self.players.append(playerName)
@@ -53,14 +53,14 @@ class Game:
                 self.isGettingOutOfPenaltyBox = True
 
                 print(self.players[self.currentPlayer] + " is getting out of the penalty box")
-                self.places[self.currentPlayer] = self.places[self.currentPlayer] + roll
-                if self.places[self.currentPlayer] > BOARD_SIZE:
-                    self.places[self.currentPlayer] = self.places[self.currentPlayer] - BOARD_SIZE
+                self.player_positions [self.currentPlayer] = self.player_positions [self.currentPlayer] + roll
+                if self.player_positions [self.currentPlayer] > BOARD_SIZE:
+                    self.player_positions [self.currentPlayer] = self.player_positions [self.currentPlayer] - BOARD_SIZE
 
                 print(
                     self.players[self.currentPlayer]
                     + "'s new location is "
-                    + str(self.places[self.currentPlayer])
+                    + str(self.player_positions [self.currentPlayer])
                 )
                 print("The category is " + self.currentCategory())
                 self.askQuestion()
@@ -69,14 +69,14 @@ class Game:
                 self.isGettingOutOfPenaltyBox = False
 
         else:
-            self.places[self.currentPlayer] = self.places[self.currentPlayer] + roll
-            if self.places[self.currentPlayer] > 12:
-                self.places[self.currentPlayer] = self.places[self.currentPlayer] - 12
+            self.player_positions [self.currentPlayer] = self.player_positions [self.currentPlayer] + roll
+            if self.player_positions [self.currentPlayer] > BOARD_SIZE:
+                self.player_positions [self.currentPlayer] = self.player_positions [self.currentPlayer] - BOARD_SIZE
 
             print(
                 self.players[self.currentPlayer]
                 + "'s new location is "
-                + str(self.places[self.currentPlayer])
+                + str(self.player_positions [self.currentPlayer])
             )
             print("The category is " + self.currentCategory())
             self.askQuestion()
@@ -92,23 +92,23 @@ class Game:
             print(self.rockQuestions.pop(0))
 
     def currentCategory(self):
-        if self.places[self.currentPlayer] - 1 == 0:
+        if self.player_positions [self.currentPlayer] - 1 == 0:
             return "Pop"
-        if self.places[self.currentPlayer] - 1 == 4:
+        if self.player_positions [self.currentPlayer] - 1 == 4:
             return "Pop"
-        if self.places[self.currentPlayer] - 1 == 8:
+        if self.player_positions [self.currentPlayer] - 1 == 8:
             return "Pop"
-        if self.places[self.currentPlayer] - 1 == 1:
+        if self.player_positions [self.currentPlayer] - 1 == 1:
             return "Science"
-        if self.places[self.currentPlayer] - 1 == 5:
+        if self.player_positions [self.currentPlayer] - 1 == 5:
             return "Science"
-        if self.places[self.currentPlayer] - 1 == 9:
+        if self.player_positions [self.currentPlayer] - 1 == 9:
             return "Science"
-        if self.places[self.currentPlayer] - 1 == 2:
+        if self.player_positions [self.currentPlayer] - 1 == 2:
             return "Sports"
-        if self.places[self.currentPlayer] - 1 == 6:
+        if self.player_positions [self.currentPlayer] - 1 == 6:
             return "Sports"
-        if self.places[self.currentPlayer] - 1 == 10:
+        if self.player_positions [self.currentPlayer] - 1 == 10:
             return "Sports"
         return "Rock"
 
