@@ -170,3 +170,121 @@ La partida termina cuando un jugador responde correctamente y alcanza la condici
 12. Corregir typo en `game.py` y `game_old.py`.
 13. Corregir bug en `game.py` y `game_old.py`.
 14. Implementar un cambio de requisito pequeño.
+
+
+## Refactorizaciones realizadas
+Durante el kata se realizaron refactorizaciones pequeñas, ejecutando `pytest` después de cada cambio importante para mantener el Golden Master en verde.
+
+Principales cambios realizados:
+1. Se extrajeron constantes para eliminar números mágicos:
+   - `MAX_PLAYERS`
+   - `MINIMUM_PLAYERS`
+   - `QUESTIONS_PER_CATEGORY`
+   - `BOARD_SIZE`
+   - `WINNING_COINS`
+   - `CATEGORIES`
+
+2. Se renombraron variables para mejorar la intención del código:
+   - `places` fue reemplazado por información de posición dentro de `Player`.
+   - `purses` fue reemplazado por `coins` dentro de `Player`.
+   - `inPenaltyBox` fue reemplazado por `in_penalty_box`.
+   - `currentPlayer` fue reemplazado por `current_player_index`.
+
+3. Se extrajeron métodos pequeños para reducir duplicación:
+   - `advance_to_next_player()`
+   - `current_player()`
+   - `current_player_name()`
+   - `current_player_position()`
+   - `move_current_player()`
+   - `show_location_and_ask_question()`
+   - `handle_normal_turn()`
+   - `handle_penalty_box_turn()`
+   - `award_coin_to_current_player()`
+   - `handle_correct_answer()`
+   - `wrong_answer()`
+
+4. Se creó la clase `Player`.
+
+La clase `Player` ahora gestiona el estado de cada jugador:
+- Nombre.
+- Posición.
+- Monedas.
+- Estado de penalización.
+
+También contiene comportamientos propios del jugador:
+- Moverse en el tablero.
+- Ganar una moneda.
+- Entrar a la caja de penalización.
+- Saber si ya ganó.
+
+5. Se creó la clase `QuestionDeck`.
+La clase `QuestionDeck` ahora gestiona las preguntas del juego:
+- Crea las preguntas por categoría.
+- Guarda las preguntas organizadas por categoría.
+- Entrega la siguiente pregunta según la categoría solicitada.
+
+Con esto, `Game` queda más enfocada en coordinar el flujo del juego.
+
+## Uso del Golden Master
+
+El Golden Master compara la salida de `Game` contra `GameOld` usando las mismas semillas aleatorias.
+Esto permitió hacer refactorizaciones internas sin cambiar el comportamiento observable del juego.
+Durante el proceso, después de cada micro-cambio se ejecutó: pytest
+
+
+## Corrección del typo y del bug
+
+### Typo detectado
+Durante la revisión del código se encontró un error ortográfico en el mensaje que se imprime cuando un jugador responde correctamente fuera de la caja de penalización.
+El mensaje original era: Answer was corrent!!!!
+
+### Bug detectado
+El bug encontrado estaba relacionado con la lógica de la caja de penalización.
+Cuando un jugador estaba en la caja de penalización y tiraba un número par, el jugador no lograba salir de la caja. En ese caso, el programa imprimía que el jugador no salía de la penalización y no se realizaba ninguna pregunta.
+La corrección se aplicó en ambos archivos:
+- game.py
+- game_old.py
+
+Esto se hizo porque el Golden Master no detectaba el bug por sí solo: el error estaba presente tanto en el código refactorizado como en el código usado como oráculo. Por lo tanto, ambas versiones se comportaban igual, aunque la lógica fuera incorrecta según las reglas del juego.
+
+
+## Bloque 4 — Retrospectiva
+
+#### ¿En qué momento me sentí seguro de que el Golden Master cubría lo suficiente?
+Me sentí seguro cuando el Golden Master comenzó a ejecutar miles de partidas con semillas aleatorias y comparó la salida de `Game` contra `GameOld`. Al usar las mismas entradas en ambos juegos, pude comprobar que mis cambios internos no alteraban el comportamiento observable del programa.
+También me dio seguridad ejecutar `pytest` después de cada micro-refactorización. Si la prueba pasaba, sabía que el cambio no había modificado la salida del juego.
+
+#### ¿Hubo algún cambio que el Golden Master no pudo detectar como peligroso? ¿Cuál?
+Sí. El Golden Master no pudo detectar automáticamente el bug relacionado con la caja de penalización, porque ese error existía tanto en `game.py` como en `game_old.py`.
+Cuando el jugador estaba en la caja de penalización y no lograba salir, no debía responder ninguna pregunta. Sin embargo, si después se llamaba a `wrongAnswer()`, el juego actuaba como si el jugador hubiera respondido mal, aunque realmente no hubo pregunta.
+
+#### ¿Por qué creo que el README dice que no debemos escribir tests unitarios durante la refactorización? ¿Estoy de acuerdo?
+El README recomienda no escribir tests unitarios durante la refactorización porque el objetivo principal del kata es practicar la técnica del Golden Master. En código legacy, primero se necesita una red de seguridad amplia que permita cambiar la estructura interna sin romper el comportamiento existente.
+Estoy de acuerdo, porque al inicio el código estaba demasiado mezclado y escribir pruebas unitarias habría sido difícil. Después de refactorizar, el código quedó dividido en clases y métodos más claros, por lo que ahora sí sería más sencillo escribir pruebas unitarias específicas para `Player`, `QuestionDeck` y algunas reglas de `Game`.
+
+### Sobre la refactorización
+#### ¿Qué olor de código fue el más difícil de eliminar? ¿Por qué?
+El olor más difícil de eliminar fue el uso de listas paralelas para representar a los jugadores.
+Originalmente, el juego usaba varias estructuras separadas para guardar información relacionada con cada jugador: nombres, posiciones, monedas y estado de penalización. Todas dependían del mismo índice.
+Esto era riesgoso porque cualquier error en el índice podía afectar el estado del jugador equivocado. Para corregirlo fue necesario crear la clase `Player` y mover poco a poco sus datos y comportamientos sin romper el Golden Master.
+
+#### ¿Cuántas veces se puso en rojo el test? ¿Qué lo causó?
+El test se puso en rojo durante los cambios que modificaban intencionalmente la salida del juego, especialmente al corregir el typo y el bug primero en `game.py` antes de hacer la misma corrección en `game_old.py`.
+Esto ocurrió porque el Golden Master compara exactamente la salida de ambos archivos. Si uno cambia y el otro no, la prueba detecta una diferencia. Después de aplicar la misma corrección en ambos archivos el test volvió a estar en verde.
+
+#### ¿Qué refactorización manual fue la más arriesgada?
+La refactorización más arriesgada fue crear la clase `Player` y mover a ella el estado del jugador: posición, monedas y penalización.
+Fue riesgosa porque el código original dependía de listas paralelas indexadas por `current_player_index`. Si se movía mal alguno de esos datos, el jugador actual podía quedar con una posición, monedas o estado de penalización incorrecto.
+Para reducir el riesgo, se hizo en pasos pequeños: primero el nombre, luego la posición, después las monedas y finalmente el estado de penalización.
+
+#### ¿Cómo podría mejorarse el diseño para que el próximo cambio de requisito sea más fácil?
+El diseño podría mejorarse separando aún más las reglas del juego en métodos o clases específicas. Por ejemplo, se podría crear una clase para las reglas del tablero o para manejar la lógica de penalización.
+También podría mejorarse haciendo que las categorías y preguntas sean configurables, en lugar de estar escritas directamente en el código. Esto permitiría agregar nuevas categorías, cambiar preguntas o modificar reglas sin tocar varias partes del programa.
+Aun así, el diseño actual ya facilita más los cambios que el código original, porque ahora existen responsabilidades más claras:
+- `Player` gestiona el estado del jugador.
+- `QuestionDeck` gestiona las preguntas.
+- `Game` coordina el flujo general del juego.
+
+## Cambio de requisito implementado
+Se implementó el requisito de máximo 6 jugadores.
+Para hacerlo, se utilizó la constante: MAX_PLAYERS = 6
