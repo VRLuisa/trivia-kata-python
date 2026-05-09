@@ -16,7 +16,7 @@ class Game:
         self.sportsQuestions = []
         self.rockQuestions = []
 
-        self.currentPlayer = 0
+        self.current_player_index = 0
         self.isGettingOutOfPenaltyBox = False
 
         for i in range(QUESTIONS_PER_CATEGORY):
@@ -45,38 +45,38 @@ class Game:
         return len(self.players)
 
     def roll(self, roll):
-        print(self.players[self.currentPlayer] + " is the current player")
+        print(self.players[self.current_player_index] + " is the current player")
         print("They have rolled a " + str(roll))
 
-        if self.player_in_penalty_box[self.currentPlayer]:
+        if self.player_in_penalty_box[self.current_player_index]:
             if roll % 2 != 0:
                 self.isGettingOutOfPenaltyBox = True
 
-                print(self.players[self.currentPlayer] + " is getting out of the penalty box")
-                self.player_positions [self.currentPlayer] = self.player_positions [self.currentPlayer] + roll
-                if self.player_positions [self.currentPlayer] > BOARD_SIZE:
-                    self.player_positions [self.currentPlayer] = self.player_positions [self.currentPlayer] - BOARD_SIZE
+                print(self.players[self.current_player_index] + " is getting out of the penalty box")
+                self.player_positions [self.current_player_index] = self.player_positions [self.current_player_index] + roll
+                if self.player_positions [self.current_player_index] > BOARD_SIZE:
+                    self.player_positions [self.current_player_index] = self.player_positions [self.current_player_index] - BOARD_SIZE
 
                 print(
-                    self.players[self.currentPlayer]
+                    self.players[self.current_player_index]
                     + "'s new location is "
-                    + str(self.player_positions [self.currentPlayer])
+                    + str(self.player_positions [self.current_player_index])
                 )
                 print("The category is " + self.currentCategory())
                 self.askQuestion()
             else:
-                print(self.players[self.currentPlayer] + " is not getting out of the penalty box")
+                print(self.players[self.current_player_index] + " is not getting out of the penalty box")
                 self.isGettingOutOfPenaltyBox = False
 
         else:
-            self.player_positions [self.currentPlayer] = self.player_positions [self.currentPlayer] + roll
-            if self.player_positions [self.currentPlayer] > BOARD_SIZE:
-                self.player_positions [self.currentPlayer] = self.player_positions [self.currentPlayer] - BOARD_SIZE
+            self.player_positions [self.current_player_index] = self.player_positions [self.current_player_index] + roll
+            if self.player_positions [self.current_player_index] > BOARD_SIZE:
+                self.player_positions [self.current_player_index] = self.player_positions [self.current_player_index] - BOARD_SIZE
 
             print(
-                self.players[self.currentPlayer]
+                self.players[self.current_player_index]
                 + "'s new location is "
-                + str(self.player_positions [self.currentPlayer])
+                + str(self.player_positions [self.current_player_index])
             )
             print("The category is " + self.currentCategory())
             self.askQuestion()
@@ -92,76 +92,76 @@ class Game:
             print(self.rockQuestions.pop(0))
 
     def currentCategory(self):
-        if self.player_positions [self.currentPlayer] - 1 == 0:
+        if self.player_positions [self.current_player_index] - 1 == 0:
             return "Pop"
-        if self.player_positions [self.currentPlayer] - 1 == 4:
+        if self.player_positions [self.current_player_index] - 1 == 4:
             return "Pop"
-        if self.player_positions [self.currentPlayer] - 1 == 8:
+        if self.player_positions [self.current_player_index] - 1 == 8:
             return "Pop"
-        if self.player_positions [self.currentPlayer] - 1 == 1:
+        if self.player_positions [self.current_player_index] - 1 == 1:
             return "Science"
-        if self.player_positions [self.currentPlayer] - 1 == 5:
+        if self.player_positions [self.current_player_index] - 1 == 5:
             return "Science"
-        if self.player_positions [self.currentPlayer] - 1 == 9:
+        if self.player_positions [self.current_player_index] - 1 == 9:
             return "Science"
-        if self.player_positions [self.currentPlayer] - 1 == 2:
+        if self.player_positions [self.current_player_index] - 1 == 2:
             return "Sports"
-        if self.player_positions [self.currentPlayer] - 1 == 6:
+        if self.player_positions [self.current_player_index] - 1 == 6:
             return "Sports"
-        if self.player_positions [self.currentPlayer] - 1 == 10:
+        if self.player_positions [self.current_player_index] - 1 == 10:
             return "Sports"
         return "Rock"
 
     def handleCorrectAnswer(self):
-        if self.player_in_penalty_box[self.currentPlayer]:
+        if self.player_in_penalty_box[self.current_player_index]:
             if self.isGettingOutOfPenaltyBox:
                 print("Answer was correct!!!!")
-                self.player_coins[self.currentPlayer] += 1
+                self.player_coins[self.current_player_index] += 1
                 print(
-                    self.players[self.currentPlayer]
+                    self.players[self.current_player_index]
                     + " now has "
-                    + str(self.player_coins[self.currentPlayer])
+                    + str(self.player_coins[self.current_player_index])
                     + " Gold Coins."
                 )
 
                 winner = self.didPlayerWin()
-                self.currentPlayer += 1
-                if self.currentPlayer == len(self.players):
-                    self.currentPlayer = 0
+                self.current_player_index += 1
+                if self.current_player_index == len(self.players):
+                    self.current_player_index = 0
 
                 return winner
             else:
-                self.currentPlayer += 1
-                if self.currentPlayer == len(self.players):
-                    self.currentPlayer = 0
+                self.current_player_index += 1
+                if self.current_player_index == len(self.players):
+                    self.current_player_index = 0
                 return True
 
         else:
             print("Answer was corrent!!!!")
-            self.player_coins[self.currentPlayer] += 1
+            self.player_coins[self.current_player_index] += 1
             print(
-                self.players[self.currentPlayer]
+                self.players[self.current_player_index]
                 + " now has "
-                + str(self.player_coins[self.currentPlayer])
+                + str(self.player_coins[self.current_player_index])
                 + " Gold Coins."
             )
 
             winner = self.didPlayerWin()
-            self.currentPlayer += 1
-            if self.currentPlayer == len(self.players):
-                self.currentPlayer = 0
+            self.current_player_index += 1
+            if self.current_player_index == len(self.players):
+                self.current_player_index = 0
 
             return winner
 
     def wrongAnswer(self):
         print("Question was incorrectly answered")
-        print(self.players[self.currentPlayer] + " was sent to the penalty box")
-        self.player_in_penalty_box[self.currentPlayer] = True
+        print(self.players[self.current_player_index] + " was sent to the penalty box")
+        self.player_in_penalty_box[self.current_player_index] = True
 
-        self.currentPlayer += 1
-        if self.currentPlayer == len(self.players):
-            self.currentPlayer = 0
+        self.current_player_index += 1
+        if self.current_player_index == len(self.players):
+            self.current_player_index = 0
         return True
 
     def didPlayerWin(self):
-        return not (self.player_coins[self.currentPlayer] == WINNING_COINS)
+        return not (self.player_coins[self.current_player_index] == WINNING_COINS)
