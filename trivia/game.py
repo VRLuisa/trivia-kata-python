@@ -9,7 +9,7 @@ class Game:
         self.players = []
         self.player_positions  = [0] * MAX_PLAYERS
         self.player_coins = [0] * MAX_PLAYERS
-        self.inPenaltyBox = [False] * MAX_PLAYERS
+        self.player_in_penalty_box = [False] * MAX_PLAYERS
 
         self.popQuestions = []
         self.scienceQuestions = []
@@ -34,7 +34,7 @@ class Game:
     def add(self, playerName):
         self.player_positions [self.howManyPlayers()] = 1
         self.player_coins[self.howManyPlayers()] = 0
-        self.inPenaltyBox[self.howManyPlayers()] = False
+        self.player_in_penalty_box[self.howManyPlayers()] = False
         self.players.append(playerName)
 
         print(playerName + " was added")
@@ -48,7 +48,7 @@ class Game:
         print(self.players[self.currentPlayer] + " is the current player")
         print("They have rolled a " + str(roll))
 
-        if self.inPenaltyBox[self.currentPlayer]:
+        if self.player_in_penalty_box[self.currentPlayer]:
             if roll % 2 != 0:
                 self.isGettingOutOfPenaltyBox = True
 
@@ -113,7 +113,7 @@ class Game:
         return "Rock"
 
     def handleCorrectAnswer(self):
-        if self.inPenaltyBox[self.currentPlayer]:
+        if self.player_in_penalty_box[self.currentPlayer]:
             if self.isGettingOutOfPenaltyBox:
                 print("Answer was correct!!!!")
                 self.player_coins[self.currentPlayer] += 1
@@ -156,7 +156,7 @@ class Game:
     def wrongAnswer(self):
         print("Question was incorrectly answered")
         print(self.players[self.currentPlayer] + " was sent to the penalty box")
-        self.inPenaltyBox[self.currentPlayer] = True
+        self.player_in_penalty_box[self.currentPlayer] = True
 
         self.currentPlayer += 1
         if self.currentPlayer == len(self.players):
