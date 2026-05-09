@@ -8,7 +8,7 @@ class Game:
     def __init__(self):
         self.players = []
         self.player_positions  = [0] * MAX_PLAYERS
-        self.purses = [0] * MAX_PLAYERS
+        self.player_coins = [0] * MAX_PLAYERS
         self.inPenaltyBox = [False] * MAX_PLAYERS
 
         self.popQuestions = []
@@ -33,7 +33,7 @@ class Game:
 
     def add(self, playerName):
         self.player_positions [self.howManyPlayers()] = 1
-        self.purses[self.howManyPlayers()] = 0
+        self.player_coins[self.howManyPlayers()] = 0
         self.inPenaltyBox[self.howManyPlayers()] = False
         self.players.append(playerName)
 
@@ -116,11 +116,11 @@ class Game:
         if self.inPenaltyBox[self.currentPlayer]:
             if self.isGettingOutOfPenaltyBox:
                 print("Answer was correct!!!!")
-                self.purses[self.currentPlayer] += 1
+                self.player_coins[self.currentPlayer] += 1
                 print(
                     self.players[self.currentPlayer]
                     + " now has "
-                    + str(self.purses[self.currentPlayer])
+                    + str(self.player_coins[self.currentPlayer])
                     + " Gold Coins."
                 )
 
@@ -138,11 +138,11 @@ class Game:
 
         else:
             print("Answer was corrent!!!!")
-            self.purses[self.currentPlayer] += 1
+            self.player_coins[self.currentPlayer] += 1
             print(
                 self.players[self.currentPlayer]
                 + " now has "
-                + str(self.purses[self.currentPlayer])
+                + str(self.player_coins[self.currentPlayer])
                 + " Gold Coins."
             )
 
@@ -164,4 +164,4 @@ class Game:
         return True
 
     def didPlayerWin(self):
-        return not (self.purses[self.currentPlayer] == WINNING_COINS)
+        return not (self.player_coins[self.currentPlayer] == WINNING_COINS)
