@@ -43,6 +43,11 @@ class Game:
 
     def howManyPlayers(self):
         return len(self.players)
+    
+    def advance_to_next_player(self):
+        self.current_player_index += 1
+        if self.current_player_index == len(self.players):
+            self.current_player_index = 0
 
     def roll(self, roll):
         print(self.players[self.current_player_index] + " is the current player")
@@ -125,15 +130,11 @@ class Game:
                 )
 
                 winner = self.didPlayerWin()
-                self.current_player_index += 1
-                if self.current_player_index == len(self.players):
-                    self.current_player_index = 0
+                self.advance_to_next_player()
 
                 return winner
             else:
-                self.current_player_index += 1
-                if self.current_player_index == len(self.players):
-                    self.current_player_index = 0
+                self.advance_to_next_player()
                 return True
 
         else:
@@ -147,9 +148,7 @@ class Game:
             )
 
             winner = self.didPlayerWin()
-            self.current_player_index += 1
-            if self.current_player_index == len(self.players):
-                self.current_player_index = 0
+            self.advance_to_next_player()
 
             return winner
 
@@ -158,9 +157,7 @@ class Game:
         print(self.players[self.current_player_index] + " was sent to the penalty box")
         self.player_in_penalty_box[self.current_player_index] = True
 
-        self.current_player_index += 1
-        if self.current_player_index == len(self.players):
-            self.current_player_index = 0
+        self.advance_to_next_player()
         return True
 
     def didPlayerWin(self):
