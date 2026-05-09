@@ -21,6 +21,12 @@ class Player:
     def award_coin(self):
         self.coins += 1
 
+    def send_to_penalty_box(self):
+        self.in_penalty_box = True
+
+    def has_won(self):
+        return self.coins == WINNING_COINS
+
 class QuestionDeck:
     def __init__(self):
         self.questions_by_category = {
@@ -170,10 +176,10 @@ class Game:
     def wrongAnswer(self):
         print("Question was incorrectly answered")
         print(self.current_player_name() + " was sent to the penalty box")
-        self.current_player().in_penalty_box = True
+        self.current_player().send_to_penalty_box()
 
         self.advance_to_next_player()
         return True
 
     def didPlayerWin(self):
-        return not (self.current_player().coins == WINNING_COINS)
+        return not self.current_player().has_won()
